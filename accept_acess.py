@@ -1,3 +1,4 @@
+import os
 import psutil
 import pyautogui
 import subprocess
@@ -22,3 +23,19 @@ def is_anydesk_running_and_start():
     if not is_program_running("anydesk"):
         subprocess.Popen("anydesk", shell=True)
         print("O AnyDesk não está em execução.")
+
+def using_images_to_search(program):
+    # Program (anydesk or teamviewer or all)
+    images_list = os.listdir("images/")
+    for image in images_list:
+        if program in image:
+            search_and_click(image_name=image)
+
+        elif program in "all":
+            search_and_click(image_name=image)
+
+
+while True:
+    # Função que usa as imagens para clicarnos botões
+    using_images_to_search("anydesk")
+    sleep(30)
