@@ -18,7 +18,7 @@ def search_and_click(image_name):
         # Click on the button
         pyautogui.click(button_position)
 
-        sleep(5)
+        sleep(10)
         # Get the position of the button
         button_position = pyautogui.locateCenterOnScreen(image_path)
 
@@ -49,5 +49,9 @@ def using_images_to_search(program):
 
 while True:
     # Função que usa as imagens para clicarnos botões
-    using_images_to_search("anydesk")
+    try:
+        using_images_to_search("anydesk")
+    except Exception as ERRO:
+        print(f"ERRO: {ERRO}")
+    
     sleep(30)
