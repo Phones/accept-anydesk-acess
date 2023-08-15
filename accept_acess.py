@@ -3,6 +3,7 @@ import psutil
 import pyautogui
 import subprocess
 from time import sleep
+from datetime import datetime, time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -15,19 +16,27 @@ options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(options=options)
 
 dict_period_convert = {
-    "1" : "13",
-    "2" : "14",
-    "3" : "15",
-    "4" : "16",
-    "5" : "17",
-    "6" : "18",
-    "7" : "19",
-    "8" : "20",
-    "9" : "21",
-    "10" : "22",
-    "11" : "23",
-    "12" : "24"
+    1 : 13,
+    2 : 14,
+    3 : 15,
+    4 : 16,
+    5 : 17,
+    6 : 18,
+    7 : 19,
+    8 : 20,
+    9 : 21,
+    10 : 22,
+    11 : 23,
+    12 : 24
 }
+
+def convert_str_to_datetime(hora_str):
+    try:
+        hora_datetime = datetime.strptime(hora_str, "%H:%M:%S")
+        hora_time = hora_datetime.time()
+        return hora_time
+    except ValueError:
+        print("Formato de hora inválido. Use o formato HH:MM:SS.")
 
 def acess_yopemail():
     # Abra o navegador
@@ -139,29 +148,48 @@ def using_images_to_search(program):
             search_and_click(image_name=image)
 
 def get_time_and_period_AM_PM():
-    hour_list = get_hour_of_email().split(" ")
+    # Pega a hora do e-mail e separa em uma lista
+    email_hour_list = get_hour_of_email().split(" ")
 
     # Pega o periodo AM ou PM
-    period = hour_list[-1]
+    period = email_hour_list[-1]
     # Pega a hora
-    hour = hour_list[-2].split("")
-    hour[0] = dict_period_convert[hour[0]]
-
+    hour, minutes, seconds = [int(x) for x in email_hour_list[-2].split(":")]
+    
+    # Se for PM ajusta para o formato 24h
     if "PM" in period:
-        hour = dict_period_convert[int()]
-        print(hour)
+        hour = dict_period_convert[hour]
+
+    # Convert a hora do e-mail para datetime
+    email_hour_datetime = datetime(2023, 1, 1, hour, minutes, seconds)
+
+    # Pega a hora atual é converte em datetime para que possa ser subtraida da outra data
+    hour_now_list = datetime.now().strftime("%H:%M:%S").split(":")
+    hour_now, minutes_now, seconds_now = [int(x) for x in hour_now_list]  
+    hour_now_datetime = datetime(2023, 1, 1, hour_now, minutes_now, seconds_now)
+    
+    # Calcula a diferença entre a hora do email para a hora atual
+    diference_in_minutes = (hour_now_datetime - email_hour_datetime).total_seconds() / 60
+    diference_in_minutes = round(diference_in_minutes, 2)
+    print(f"Diference ---> {abs(diference_in_minutes)}")
+    if abs(diference_in_minutes) <= 5:
+        print("---> O e-mail foi enviado dentro dos ultimos 5 min")
+        return True
+    
+    return False
 
 acess_yopemail()
 while True:
     # Função que usa as imagens para clicarnos botões
     try:
         driver.refresh()
-        sleep(8)
+        sleep(10)
         switch_to_iframe_using_id("ifmail")
 
-        get_time_and_period_AM_PM()
-        get_text_of_last_email()
-        
-        using_images_to_search("anydesk")
+        if get_time_and_period_AM_PM():
+            email_text = get_text_of_last_email()
+            if "start" in email_text:
+                using_images_to_search("anydesk")
+    
     except Exception as ERRO:
         print(f"ERRO: {ERRO}")
