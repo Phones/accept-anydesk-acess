@@ -147,9 +147,17 @@ def search_and_click(image_name):
         # Click on the button
         pyautogui.click(button_position)
 
-        sleep(10)
+        sleep(7)
         # Get the position of the button
         button_position = pyautogui.locateCenterOnScreen(image_path)
+
+        sleep(7)
+        # Click in close anydesk button
+        anydesk_taskbar_image = "images/close_button.png"
+        button_position = pyautogui.locateCenterOnScreen(anydesk_taskbar_image)
+
+        # Click on the button
+        pyautogui.click(button_position)
 
     # Click on the button
     pyautogui.click(button_position)
