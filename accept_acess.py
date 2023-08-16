@@ -13,11 +13,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from yaml.loader import SafeLoader
 
-# Crie um objeto WebDriver
-options = webdriver.ChromeOptions()
-# options.add_argument('--headless')
-driver = webdriver.Chrome(options=options)
-
 dict_period_convert = {
     1: 13,
     2: 14,
@@ -33,6 +28,15 @@ dict_period_convert = {
     12: 24,
 }
 
+def create_driver():
+    # Crie um objeto WebDriver
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+
+    return driver
+
+driver = create_driver()
 
 def get_credentials():
     """Carrega as credenciais do arquivo credentials.yml
@@ -224,6 +228,14 @@ def get_time_and_period_AM_PM():
 
     return False
 
+def restart_aplication():
+    try:
+        driver.close()
+    except:
+        pass
+
+    driver = create_driver()
+    acess_yopemail
 
 acess_yopemail()
 while True:
@@ -244,4 +256,6 @@ while True:
         sleep(300)
     except Exception as ERRO:
         print(f"ERRO: {ERRO}")
-        sleep(600)
+        sleep(900)
+        restart_aplication()
+
