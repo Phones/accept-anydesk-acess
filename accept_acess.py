@@ -28,15 +28,18 @@ dict_period_convert = {
     12: 24,
 }
 
+
 def create_driver():
     # Crie um objeto WebDriver
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
 
     return driver
 
+
 driver = create_driver()
+
 
 def get_credentials():
     """Carrega as credenciais do arquivo credentials.yml
@@ -228,6 +231,7 @@ def get_time_and_period_AM_PM():
 
     return False
 
+
 def restart_aplication():
     try:
         driver.close()
@@ -236,6 +240,7 @@ def restart_aplication():
 
     driver = create_driver()
     acess_yopemail
+
 
 acess_yopemail()
 while True:
@@ -258,4 +263,3 @@ while True:
         print(f"ERRO: {ERRO}")
         sleep(900)
         restart_aplication()
-
