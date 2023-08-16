@@ -84,8 +84,7 @@ def wait_element_using_class_name(class_name, time_limit=10):
 
 def get_text_of_last_email():
     element = wait_element_using_id("mail", 10)
-
-    print(element.text)
+    return element.text
 
 def get_hour_of_email():
     # Pega o elemento que contem a hora do email
@@ -164,16 +163,17 @@ def get_time_and_period_AM_PM():
     email_hour_datetime = datetime(2023, 1, 1, hour, minutes, seconds)
 
     # Pega a hora atual é converte em datetime para que possa ser subtraida da outra data
-    hour_now_list = datetime.now().strftime("%H:%M:%S").split(":")
+    h_m_s_now = datetime.now().strftime("%H:%M:%S")
+    hour_now_list = h_m_s_now.split(":")
     hour_now, minutes_now, seconds_now = [int(x) for x in hour_now_list]  
     hour_now_datetime = datetime(2023, 1, 1, hour_now, minutes_now, seconds_now)
     
     # Calcula a diferença entre a hora do email para a hora atual
     diference_in_minutes = (hour_now_datetime - email_hour_datetime).total_seconds() / 60
     diference_in_minutes = round(diference_in_minutes, 2)
-    print(f"Diference ---> {abs(diference_in_minutes)}")
+    print(f"| Hora atual --> [{h_m_s_now}] Diference --> [{abs(diference_in_minutes)}]    |")
     if abs(diference_in_minutes) <= 5:
-        print("---> O e-mail foi enviado dentro dos ultimos 5 min")
+        print("| ---> O e-mail foi enviado dentro dos ultimos 5 min |")
         return True
     
     return False
@@ -183,13 +183,17 @@ while True:
     # Função que usa as imagens para clicarnos botões
     try:
         driver.refresh()
-        sleep(10)
         switch_to_iframe_using_id("ifmail")
-
+        
+        # Verifica se o anydesk est aem execução. Caso não, inicia 
+        is_anydesk_running_and_start()
+        print("------------------------------------------------------")
         if get_time_and_period_AM_PM():
             email_text = get_text_of_last_email()
             if "start" in email_text:
                 using_images_to_search("anydesk")
-    
+        print("------------------------------------------------------")
+        
+        sleep(300)
     except Exception as ERRO:
         print(f"ERRO: {ERRO}")
