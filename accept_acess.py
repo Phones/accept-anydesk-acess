@@ -1,16 +1,17 @@
 import os
-import yaml
+import subprocess
+from datetime import datetime, time
+from time import sleep
+
 import psutil
 import pyautogui
-import subprocess
-from time import sleep
-from yaml.loader import SafeLoader
-from datetime import datetime, time
+import yaml
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from yaml.loader import SafeLoader
 
 # Crie um objeto WebDriver
 options = webdriver.ChromeOptions()
