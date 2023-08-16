@@ -147,6 +147,7 @@ def search_and_click(image_name):
     button_position = pyautogui.locateCenterOnScreen(image_path)
 
     if button_position is None:
+        sleep(2)
         # Click in anydesk runnung in taskbar
         anydesk_taskbar_image = "images/anydesk_in_taskbar.png"
         button_position = pyautogui.locateCenterOnScreen(anydesk_taskbar_image)
@@ -154,17 +155,16 @@ def search_and_click(image_name):
         # Click on the button
         pyautogui.click(button_position)
 
-        sleep(7)
-        # Get the position of the button
-        button_position = pyautogui.locateCenterOnScreen(image_path)
-
-        sleep(7)
+        sleep(10)
         # Click in close anydesk button
-        anydesk_taskbar_image = "images/close_button.png"
-        button_position = pyautogui.locateCenterOnScreen(anydesk_taskbar_image)
+        close_button_image = "images/close_button.png"
+        button_position = pyautogui.locateCenterOnScreen(close_button_image)
 
         # Click on the button
         pyautogui.click(button_position)
+
+        # Get the position of the button
+        button_position = pyautogui.locateCenterOnScreen(image_path)
 
     # Click on the button
     pyautogui.click(button_position)
@@ -225,7 +225,7 @@ def get_time_and_period_AM_PM():
     print(
         f"| Hora atual --> [{h_m_s_now}] Diference --> [{abs(diference_in_minutes)}]    |"
     )
-    if abs(diference_in_minutes) <= 5:
+    if abs(diference_in_minutes) <= 6:
         print("| ---> O e-mail foi enviado dentro dos ultimos 5 min |")
         return True
 
